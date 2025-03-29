@@ -21,11 +21,14 @@ services:
       - 5433:5432/tcp
   keyv_mysql:
     image: mysql/mysql-server:latest
-    command: [ "mysqld",
-               "--character-set-server=utf8mb4",
-               "--collation-server=utf8mb4_unicode_ci",
-               "--bind-address=0.0.0.0",
-               "--default_authentication_plugin=mysql_native_password" ]
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--bind-address=0.0.0.0",
+        "--default_authentication_plugin=mysql_native_password",
+      ]
     restart: always
     ports:
       - 3306:3306
@@ -33,18 +36,21 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: keyv_test
       MYSQL_USER: mysql
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
   keyv_mysql_1:
     image: "mysql/mysql-server:latest"
-    command: [ "mysqld",
-               "--character-set-server=utf8mb4",
-               "--collation-server=utf8mb4_unicode_ci",
-               "--require_secure_transport=ON",
-               "--bind-address=0.0.0.0",
-               "--ssl-ca=/etc/certs/ca.pem",
-               "--ssl-cert=/etc/certs/server-cert.pem",
-               "--ssl-key=/etc/certs/server-key.pem",
-               "--default_authentication_plugin=mysql_native_password" ]
+    command:
+      [
+        "mysqld",
+        "--character-set-server=utf8mb4",
+        "--collation-server=utf8mb4_unicode_ci",
+        "--require_secure_transport=ON",
+        "--bind-address=0.0.0.0",
+        "--ssl-ca=/etc/certs/ca.pem",
+        "--ssl-cert=/etc/certs/server-cert.pem",
+        "--ssl-key=/etc/certs/server-key.pem",
+        "--default_authentication_plugin=mysql_native_password",
+      ]
     ports:
       - "3307:3306"
     volumes:
@@ -55,7 +61,7 @@ services:
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: 1
       MYSQL_DATABASE: keyv_test
-      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_HOST: "%"
   keyv_valkey:
     image: valkey/valkey:latest
     command: redis-server --port 6370
@@ -94,3 +100,9 @@ services:
     ports:
       - 2379:2379
       - 2380:2380
+  keyv_nats:
+    image: nats:latest
+    command: -js
+    ports:
+      - "4222:4222"
+      - "8222:8222"
